@@ -115,25 +115,7 @@ fonts.packages = with pkgs; [
    ];
  };
 
-home-manager.users.charlie = {
-    home.stateVersion = "25.11";
-
-    programs.zsh = {
-        enable = true;
-        enableCompletion = true;
-        autosuggestion.enable = true;
-        syntaxHighlighting.enable = true;
-        oh-my-zsh.enable = false;
-        initContent = lib.mkBefore ''
-            source ${pkgs.grml-zsh-config}/etc/zsh/zshrc
-        '';
-    };
-
-	programs.starship = {
-		enable = true;
-        enableZshIntegration = true;
-	};
-};
+home-manager.users.charlie = import ./home/charlie.nix
 
 programs.zsh.enable = true;
 

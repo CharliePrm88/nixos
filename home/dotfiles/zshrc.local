@@ -1,0 +1,59 @@
+#### =====================================================
+#### ENV / PATH
+#### =====================================================
+
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
+export MAVEN_HOME=/usr/share/java/maven
+export M2_HOME="$HOME/.m2"
+
+export PATH="$JAVA_HOME/bin:$PATH"
+export PATH="$MAVEN_HOME/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+
+#### =====================================================
+#### XDG Base Directories
+#### =====================================================
+
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+
+#### =====================================================
+#### FORTUNE + COWSAY (solo shell interattiva)
+#### =====================================================
+
+if [[ -o interactive ]] \
+   && command -v fortune >/dev/null 2>&1 \
+   && command -v cowsay >/dev/null 2>&1 \
+   && command -v lolcat  >/dev/null 2>&1; then
+
+  COWS=($(cowsay -l | tail -n +2 | tr ' ' '\n'))
+  COW=${COWS[RANDOM % ${#COWS[@]}]}
+
+  fortune | cowsay -f "$COW" | lolcat -F 0.3
+fi
+
+#### =====================================================
+#### SSH AGENT (systemd)
+#### =====================================================
+
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+
+if [[ -S "$XDG_RUNTIME_DIR/ssh-agent.socket" ]]; then
+  export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+
+  if [[ -o interactive ]] && command -v ssh-add >/dev/null 2>&1; then
+    ssh-add -l >/dev/null 2>&1 || ssh-add ~/.ssh/azureLeo
+  fi
+fi
+
+#### =====================================================
+#### PROMPT
+#### =====================================================
+
+# spegne prompt grml
+prompt off
+
+# starship
+eval "$(starship init zsh)"
