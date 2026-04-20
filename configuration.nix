@@ -52,6 +52,7 @@
   services.xserver.enable = true;
 
   # Enable LightDM
+  environment.etc."lightdm/lightdm-gtk-greeter.conf.d".source = ./themes/lightdm/lightdm-gtk-greeter.conf.d;
   services.xserver.displayManager.lightdm = {
      enable = true;
      greeters.gtk.enable = true;
@@ -115,7 +116,7 @@ fonts.packages = with pkgs; [
    ];
  };
 
-home-manager.users.charlie = import ./home/charlie.nix
+home-manager.users.charlie = import ./home/charlie.nix;
 
 programs.zsh.enable = true;
 
