@@ -26,6 +26,7 @@
 
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
+  boot.kernelPackages = pkgs.linuxPackages-rt_latest;
 
   networking.hostName = "charlie-lab"; # Define your hostname.
 
@@ -118,6 +119,8 @@ fonts.packages = with pkgs; [
                    "audio"
                    "video"
                    "storage"
+                   "docker"
+                   "vboxusers"
                  ];
    shell = pkgs.zsh;
    hashedPassword = "***REMOVED-PASSWORD-HASH***";
@@ -129,6 +132,9 @@ fonts.packages = with pkgs; [
 home-manager.users.charlie = import ./home/charlie.nix;
 
 programs.zsh.enable = true;
+
+virtualisation.docker.enable = true;
+virtualisation.virtualbox.host.enable = true;
 
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
