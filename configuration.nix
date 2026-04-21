@@ -26,7 +26,7 @@
 
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
-  boot.kernelPackages = pkgs.linuxPackages-rt_latest;
+  #boot.kernelPackages = pkgs.linuxPackages-rt_latest;
 
   networking.hostName = "charlie-lab"; # Define your hostname.
 
