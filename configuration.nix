@@ -10,6 +10,7 @@
       ./hardware-configuration.nix
       <home-manager/nixos>
       ./modules/packages.nix
+      ./modules/appearence.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -53,13 +54,22 @@
 
   # Enable LightDM
   environment.etc."lightdm/lightdm-gtk-greeter.conf.d".source = ./themes/lightdm/lightdm-gtk-greeter.conf.d;
-  services.xserver.displayManager.lightdm = {
-     enable = true;
-     greeters.gtk.enable = true;
+  services.xserver.displayManager.lightdm.greeters.gtk = {
+    enable = true;
+    theme = {
+      name = "Ambiant-MATE-Dark";
+    };
+    iconTheme = {
+      name = "Ambiant-MATE";
+    };
+    clock-format = "%a %d %b, %H:%M";
   };
+  services.xserver.displayManager.lightdm.background = ./themes/radioactive.png;
 
   #Enable Mate
   services.xserver.desktopManager.mate.enable = true;
+  services.xserver.desktopManager.mate.extraCajaExtensions = with pkgs.mate; [caja-extensions];
+
   services.xserver.windowManager.i3 = {
 		enable = true;
 		extraPackages = with pkgs; [
