@@ -54,8 +54,7 @@
   # =====================================================
   # MATE ecosystem
   # =====================================================
-  mate.caja
-  mate.caja-extensions
+  mate.caja-with-extensions
   mate.atril
   mate.engrampa
   mate.eom
@@ -71,7 +70,7 @@
   mate.mate-icon-theme-faenza
   mate.mozo
   mate.pluma
-  mate.mate-panel
+  mate.mate-panel-with-applets
   mate.mate-applets
   mate.mate-notification-daemon
   mate.mate-polkit
@@ -83,6 +82,15 @@
   mate.mate-netbook
   mate.mate-sensors-applet
   mate.marco
+  mate.libmatekbd
+  mate.libmatemixer
+  mate.libmateweather
+  mate.mate-calc
+  mate.mate-control-center
+  mate.mate-desktop
+  mate.mate-indicator-applet
+  mate.mate-utils
+  mate.python-caja
 
   # =====================================================
   # Networking
@@ -90,6 +98,7 @@
   networkmanagerapplet
   gvfs
   filezilla
+  firefox
   openconnect
   openvpn
   wireshark
@@ -185,7 +194,6 @@
   jetbrains.datagrip
   jetbrains.webstorm
   android-studio
-  cheese
   ];
 
 }

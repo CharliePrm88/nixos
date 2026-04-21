@@ -80,7 +80,12 @@
 
   #Enable Mate
   services.xserver.desktopManager.mate.enable = true;
-  services.xserver.desktopManager.mate.extraCajaExtensions = with pkgs.mate; [caja-extensions];
+  services.xserver.desktopManager.mate.extraCajaExtensions = with pkgs.mate; [
+      caja-extensions
+    ];
+  services.xserver.desktopManager.mate.extraPanelApplets = with pkgs.mate; [
+      mate-applets
+    ];
 
   services.xserver.windowManager.i3 = {
 		enable = true;
