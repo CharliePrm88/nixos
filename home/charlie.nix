@@ -5,6 +5,7 @@
 
     home.file.".zshrc.local".source = ./dotfiles/zshrc.local;
     home.file.".config/i3/config".source = ./dotfiles/i3wm/config;
+    home.file.".face".source = ./dotfiles/faces.jpg;
  
     gtk = {
         enable = true;
