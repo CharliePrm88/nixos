@@ -7,7 +7,7 @@
   home.stateVersion = "25.11";
   home.sessionVariables = {
     TERMINAL = "mate-terminal";
-  }
+  };
   imports = [
     ./console/starship/starship.nix
     ./console/zsh/zsh.nix
