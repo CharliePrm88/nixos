@@ -6,7 +6,7 @@
 }: {
   programs.git = {
     enable = true;
-    userName = "Stefano Ponzi";
-    userEmail = "***REMOVED-WORK-EMAIL***";
+    settings.user.name = "Stefano Ponzi";
+    settings.user.email = "***REMOVED-WORK-EMAIL***";
   };
 }

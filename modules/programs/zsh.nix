@@ -4,16 +4,12 @@
   pkgs,
   ...
 }: {
-  programs.zsh.enable = {
+  programs.zsh = {
     enable = true;
     enableCompletion = true;
-    autosuggestion.enable = true;
+    autosuggestions.enable = true;
     syntaxHighlighting.enable = true;
-    oh-my-zsh.enable = false;
-
-    initContent = lib.mkBefore ''
-      source ${pkgs.grml-zsh-config}/etc/zsh/zshrc
-    '';
+    ohMyZsh.enable = false;
   };
 
   environment.systemPackages = with pkgs; [

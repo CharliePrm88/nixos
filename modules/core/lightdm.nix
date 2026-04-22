@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: {
-  environment.etc."lightdm/lightdm-gtk-greeter.conf.d".source = ./themes/lightdm/lightdm-gtk-greeter.conf.d;
+  environment.etc."lightdm/lightdm-gtk-greeter.conf.d".source = ../themes/lightdm/lightdm-gtk-greeter.conf.d;
   services.xserver.displayManager.lightdm.greeters.gtk = {
     enable = true;
     theme = {
@@ -26,5 +26,5 @@
       "~clock"
     ];
   };
-  services.xserver.displayManager.lightdm.background = ./themes/radioactive.png;
+  services.xserver.displayManager.lightdm.background = ../themes/radioactive.png;
 }

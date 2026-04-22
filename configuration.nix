@@ -41,7 +41,7 @@
     ];
   };
 
-  home-manager.users.charlie = import ./home/charlie.nix;
+  home-manager.users.charlie = import ./home/charlie/charlie.nix;
 
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
