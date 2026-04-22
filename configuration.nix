@@ -1,43 +1,47 @@
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
-{ config, lib, pkgs, ... }:
-
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      <home-manager/nixos>
-      ./modules/packages.nix
-      ./modules/appearence.nix
-    ];
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    <home-manager/nixos>
+    ./modules/core.nix
+    ./modules/desktop.nix
+    ./modules/packages.nix
+    ./modules/programs.nix
+  ];
 
   nixpkgs.config.allowUnfree = true;
+  security.sudo.wheelNeedsPassword = true;
+  system.autoUpgrade.enable = true;
 
-security.sudo.wheelNeedsPassword = true;
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.charlie = {
+    isNormalUser = true;
+    description = "Stefano Ponzi";
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "audio"
+      "video"
+      "storage"
+      "docker"
+      "vboxusers"
+    ];
+    shell = pkgs.zsh;
+    hashedPassword = "***REMOVED-PASSWORD-HASH***";
+    packages = with pkgs; [
+      tree
+    ];
+  };
 
-# Define a user account. Don't forget to set a password with ‘passwd’.
- users.users.charlie = {
-   isNormalUser = true;
-   description = "Stefano Ponzi";
-   extraGroups = [ "wheel"
-                   "networkmanager"
-                   "audio"
-                   "video"
-                   "storage"
-                   "docker"
-                   "vboxusers"
-                 ];
-   shell = pkgs.zsh;
-   hashedPassword = "***REMOVED-PASSWORD-HASH***";
-   packages = with pkgs; [
-     tree
-   ];
- };
-
-home-manager.users.charlie = import ./home/charlie.nix;
-
+  home-manager.users.charlie = import ./home/charlie.nix;
 
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
@@ -47,8 +51,6 @@ home-manager.users.charlie = import ./home/charlie.nix;
   # ];
 
   # List services that you want to enable:
-
-
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
@@ -73,5 +75,4 @@ home-manager.users.charlie = import ./home/charlie.nix;
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "25.11"; # Did you read the comment?
-
 }

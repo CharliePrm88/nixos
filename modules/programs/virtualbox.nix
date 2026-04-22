@@ -1,5 +1,8 @@
-{ config, lib, pkgs, ... }:
-
 {
-    virtualisation.virtualbox.host.enable = true;
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
+  virtualisation.virtualbox.host.enable = true;
 }

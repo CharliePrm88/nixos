@@ -1,6 +1,8 @@
-{ config, lib, pkgs, ... }:
-
 {
-  # Set your time zone.
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   time.timeZone = "Europe/Rome";
 }

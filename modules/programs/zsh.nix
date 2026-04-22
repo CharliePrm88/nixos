@@ -1,5 +1,23 @@
-{ config, lib, pkgs, ... }:
-
 {
-    programs.zsh.enable = true;
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
+  programs.zsh.enable = {
+    enable = true;
+    enableCompletion = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
+    oh-my-zsh.enable = false;
+
+    initContent = lib.mkBefore ''
+      source ${pkgs.grml-zsh-config}/etc/zsh/zshrc
+    '';
+  };
+
+  environment.systemPackages = with pkgs; [
+    grml-zsh-config
+    zsh-history-substring-search
+  ];
 }

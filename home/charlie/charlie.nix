@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
-
 {
-    home.stateVersion = "25.11";
-
-    home.file.".zshrc.local".source = ./dotfiles/zshrc.local;
-    home.file.".config/i3/config".source = ./dotfiles/i3wm/config;
-	
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
+  home.stateVersion = "25.11";
+  imports = [
+    ./console/starship/starship.nix
+    ./console/zsh/zsh.nix
+    ./desktop/i3wm/i3wm.nix
+    ./desktop/mate/mate.nix
+    ./programs/git.nix
+  ];
 }

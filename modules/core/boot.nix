@@ -1,16 +1,17 @@
-
-{ config, lib, pkgs, ... }:
-
-{ 
-  # Use the systemd-boot EFI boot loader.
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   boot.loader.systemd-boot.enable = false;
 
   boot.loader.grub = {
-     enable = true;
-     efiSupport = true;
-     device = "nodev";
-     useOSProber = true;
-     enableCryptodisk = true;
+    enable = true;
+    efiSupport = true;
+    device = "nodev";
+    useOSProber = true;
+    enableCryptodisk = true;
   };
 
   boot.loader.efi.canTouchEfiVariables = true;
