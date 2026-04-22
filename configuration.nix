@@ -13,6 +13,7 @@
     <home-manager/nixos>
     ./modules/core.nix
     ./modules/desktop.nix
+    ./modules/fonts/fonts.nix
     ./modules/packages.nix
     ./modules/programs.nix
   ];
