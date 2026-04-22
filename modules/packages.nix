@@ -87,6 +87,8 @@
     ueberzug
     w3m
     telegram-desktop
+	gnuchess
+	gnome-chess
 
     # =====================================================
     # Unfree / AUR-like
