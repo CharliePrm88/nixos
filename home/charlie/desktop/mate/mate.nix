@@ -213,7 +213,7 @@
     };
 
     "org/mate/panel/objects/object-1" = {
-      launcher-location = "mate-terminal-1.desktop";
+      launcher-location = "mate-terminal.desktop";
       object-type = "launcher";
       panel-right-stick = false;
       position = 256;
