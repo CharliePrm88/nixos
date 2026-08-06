@@ -15,6 +15,7 @@
     ../../modules/fonts/fonts.nix
     ../../modules/packages.nix
     ../../modules/programs.nix
+    ../../modules/qol.nix
   ];
 
   networking.hostName = "charlie-lab";
