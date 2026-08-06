@@ -10,6 +10,7 @@
     ./core/console.nix
     ./core/lightdm.nix
     ./core/network.nix
+    ./core/nix.nix
     ./core/time.nix
     ./core/xserver.nix
   ];

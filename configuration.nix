@@ -10,7 +10,6 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    <home-manager/nixos>
     ./modules/core.nix
     ./modules/desktop.nix
     ./modules/fonts/fonts.nix
@@ -42,7 +41,17 @@
     ];
   };
 
-  home-manager.users.charlie = import ./home/charlie/charlie.nix;
+  home-manager = {
+    # Home Manager usa il nixpkgs del sistema (niente secondo albero) e
+    # installa i pacchetti utente nel profilo, non nella home.
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    # Se un file gestito esiste gia' non-gestito, viene rinominato invece
+    # di far fallire l'attivazione.
+    backupFileExtension = "hm-bak";
+
+    users.charlie = import ./home/charlie/charlie.nix;
+  };
 
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
