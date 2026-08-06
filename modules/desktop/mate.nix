@@ -5,6 +5,13 @@
   ...
 }: {
   programs.dconf.enable = true;
+
+  # Il demone gvfs: e' quello che da' a Caja i segnalibri di rete, il
+  # cestino, il mount degli MTP e delle share SMB. Il pacchetto gvfs da
+  # solo, in environment.systemPackages, non avviava niente ed e' stato
+  # tolto da modules/packages.nix.
+  services.gvfs.enable = true;
+
   services.xserver.enable = true;
   services.xserver.desktopManager.mate.enable = true;
   services.xserver.desktopManager.mate.extraCajaExtensions = with pkgs.mate; [

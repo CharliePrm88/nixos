@@ -36,7 +36,6 @@
     # =====================================================
     # Networking
     # =====================================================
-    gvfs
     filezilla
     firefox
     wireshark
@@ -53,8 +52,8 @@
     gradle
     maven
     nodejs_24
-    javaPackages.compiler.openjdk21
-    javaPackages.compiler.openjdk25
+    # Il JDK arriva da programs.java (modules/programs/java.nix):
+    # metterlo anche qui significava due `java` nel PATH globale.
     visualvm
 
     # =====================================================

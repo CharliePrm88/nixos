@@ -1,23 +1,21 @@
 #### =====================================================
 #### ENV / PATH
 #### =====================================================
+####
+#### JAVA_HOME e MAVEN_HOME sono stati rimossi: puntavano a
+#### /usr/lib/jvm e /usr/share/java, percorsi FHS che su NixOS non
+#### esistono. Il JDK arriva da programs.java (modules/programs/java.nix),
+#### maven da environment.systemPackages: sono gia' nel PATH.
+####
+#### Anche il blocco XDG_* e' stato rimosso: lo imposta Home Manager
+#### con xdg.enable (home/charlie/charlie.nix).
+####
+#### E cosi' il blocco ssh-agent: adesso lo gestisce
+#### services.ssh-agent (home/charlie/programs/ssh.nix), che esporta
+#### SSH_AUTH_SOCK da solo.
 
-export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
-export MAVEN_HOME=/usr/share/java/maven
 export M2_HOME="$HOME/.m2"
-
-export PATH="$JAVA_HOME/bin:$PATH"
-export PATH="$MAVEN_HOME/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
-
-#### =====================================================
-#### XDG Base Directories
-#### =====================================================
-
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_CACHE_HOME="$HOME/.cache"
-export XDG_DATA_HOME="$HOME/.local/share"
-export XDG_STATE_HOME="$HOME/.local/state"
 
 #### =====================================================
 #### FORTUNE + COWSAY (solo shell interattiva)
@@ -35,25 +33,10 @@ if [[ -o interactive ]] \
 fi
 
 #### =====================================================
-#### SSH AGENT (systemd)
-#### =====================================================
-
-export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
-
-if [[ -S "$XDG_RUNTIME_DIR/ssh-agent.socket" ]]; then
-  export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
-
-  if [[ -o interactive ]] && command -v ssh-add >/dev/null 2>&1; then
-    ssh-add -l >/dev/null 2>&1 || ssh-add ~/.ssh/azureLeo
-  fi
-fi
-
-#### =====================================================
 #### PROMPT
 #### =====================================================
 
-# spegne prompt grml
+# Spegne il prompt di grml. Starship viene inizializzato subito dopo da
+# programs.starship.enableZshIntegration: l'eval che stava qui era un
+# secondo init dello stesso prompt ed e' stato tolto.
 prompt off
-
-# starship
-eval "$(starship init zsh)"
