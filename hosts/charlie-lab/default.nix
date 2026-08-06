@@ -32,11 +32,29 @@
       "vboxusers"
     ];
     shell = pkgs.zsh;
-    hashedPassword = "***REMOVED-PASSWORD-HASH***";
+
+    # L'hash NON sta nella repo: sta in un file fuori dal versionamento,
+    # letto all'attivazione. Il file deve esistere PRIMA del primo
+    # switch, altrimenti l'account resta senza password valida e, con
+    # users.mutableUsers = false, non c'e' modo di impostarla da dentro
+    # il sistema.
+    #
+    # Procedura completa in README.md, sezione "Segreti".
+    # In breve:
+    #     sudo install -d -m 0700 /etc/secrets
+    #     mkpasswd -m sha-512 | sudo tee /etc/secrets/charlie.hashedPassword
+    #     sudo chmod 0600 /etc/secrets/charlie.hashedPassword
+    hashedPasswordFile = "/etc/secrets/charlie.hashedPassword";
+
     packages = with pkgs; [
       tree
     ];
   };
+
+  # Password di root separata: e' la via di rientro se il file di
+  # charlie manca o e' sbagliato. Se il file non esiste, root resta
+  # semplicemente bloccato (l'attivazione avvisa ma non fallisce).
+  users.users.root.hashedPasswordFile = "/etc/secrets/root.hashedPassword";
 
   home-manager = {
     # Home Manager usa il nixpkgs del sistema (niente secondo albero) e

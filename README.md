@@ -25,6 +25,7 @@ Questo README descrive la procedura completa per **reinstallare la macchina da z
 10. [Primo avvio e post-installazione](#10-primo-avvio-e-post-installazione)
 11. [Manutenzione ordinaria](#11-manutenzione-ordinaria)
 12. [Note e trappole note](#12-note-e-trappole-note)
+13. [Segreti](#13-segreti)
 
 ---
 
@@ -273,5 +274,108 @@ sudo nixos-rebuild switch
   ```
 - **`zshrc.local` non è agganciato** — in `zsh.nix` il blocco `initExtra` che dovrebbe farne il source è commentato (`# zshrc.local TODO`), quindi il file viene installato in `~/.zshrc.local` ma non letto. Da sistemare se se ne vuole l'effetto.
 - **Doppia definizione di `programs.zsh`** — una a livello di sistema (`modules/programs/zsh.nix`) e una in Home Manager (`home/charlie/console/zsh/zsh.nix`). Non è un errore, ma le due usano attributi con nomi diversi (`autosuggestions` vs `autosuggestion`, `ohMyZsh` vs `oh-my-zsh`): attenzione quando si modifica una delle due.
-- **Segreti** — `hashedPassword` e l'email in `home/charlie/programs/git.nix` sono in chiaro nella repo. L'hash SHA-512 non è reversibile facilmente, ma se la repo è pubblica vale la pena spostarlo fuori (file fuori dal versionamento, `sops-nix`, `agenix`).
+- **Segreti** — vedi [§13](#13-segreti).
 - **Documentazione** — `nixos-help` apre il manuale locale; le opzioni si cercano su <https://search.nixos.org/options>.
+
+## 13. Segreti
+
+Nella repo non c'è nessun segreto: né hash di password, né l'indirizzo email aziendale. Entrambi vivono in file **fuori dal versionamento**, che vanno creati a mano.
+
+Un hook pre-commit (`.githooks/pre-commit`) blocca il commit se fra le righe aggiunte ricompare un hash Unix (`$6$`, `$y$`, `$2b$`) o il dominio aziendale. Si attiva con:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+`nix develop` lo fa da solo e mette `gitleaks` nel PATH. Senza gitleaks l'hook usa un controllo `grep` equivalente. Bypass di emergenza: `git commit --no-verify`.
+
+### 13.1 Password di sistema — DA FARE PRIMA DEL PRIMO SWITCH
+
+> [!CAUTION]
+> La configurazione usa `users.users.charlie.hashedPasswordFile` e `users.mutableUsers = false`.
+> Se il file **non esiste al momento dello `switch`**, l'account `charlie` resta senza password valida: niente login grafico, niente `sudo`, e `passwd` non funziona più perché `mutableUsers = false` rende `/etc/shadow` di sola lettura.
+> Creare i file **prima** di applicare la configurazione.
+
+I percorsi attesi sono:
+
+| File | Utente |
+|---|---|
+| `/etc/secrets/charlie.hashedPassword` | `charlie` |
+| `/etc/secrets/root.hashedPassword` | `root` (via di rientro se il primo è sbagliato) |
+
+Procedura, da eseguire come root:
+
+```bash
+# 1. cartella dei segreti, leggibile solo da root
+sudo install -d -m 0700 /etc/secrets
+
+# 2. hash per charlie — mkpasswd chiede la password due volte
+#    (se manca il comando: nix shell nixpkgs#mkpasswd)
+mkpasswd -m sha-512 | sudo tee /etc/secrets/charlie.hashedPassword
+
+# 3. hash per root, diverso da quello di charlie
+mkpasswd -m sha-512 | sudo tee /etc/secrets/root.hashedPassword
+
+# 4. permessi stretti
+sudo chmod 0600 /etc/secrets/*.hashedPassword
+
+# 5. verifica: una riga sola, che inizia con $6$
+sudo cat /etc/secrets/charlie.hashedPassword
+```
+
+> [!IMPORTANT]
+> Il file deve contenere **solo l'hash**, su una riga. `mkpasswd` non aggiunge nulla, ma se l'hash viene incollato a mano attenzione a non lasciarci spazi o righe vuote.
+
+**In fase di installazione da zero** i file vanno creati sotto `/mnt` prima di `nixos-install`:
+
+```bash
+install -d -m 0700 /mnt/etc/secrets
+mkpasswd -m sha-512 > /mnt/etc/secrets/charlie.hashedPassword
+mkpasswd -m sha-512 > /mnt/etc/secrets/root.hashedPassword
+chmod 0600 /mnt/etc/secrets/*.hashedPassword
+```
+
+**Per cambiare password in seguito** non si usa `passwd`:
+
+```bash
+mkpasswd -m sha-512 | sudo tee /etc/secrets/charlie.hashedPassword
+sudo nixos-rebuild switch --flake .#charlie-lab
+```
+
+**Se ci si è chiusi fuori:** al menu GRUB scegliere una generazione precedente (quella prima dello switch), oppure premere `e` sulla voce di boot e aggiungere `init=/bin/sh` alla riga del kernel per ottenere una shell di root senza password, montare `/` in lettura-scrittura e creare i file.
+
+`/etc/secrets/` non è gestito da NixOS: sopravvive ai rebuild, ma **non è nella repo**. Va nel backup insieme a `~/.ssh` e agli altri dati non versionati.
+
+### 13.2 Identità git
+
+`home/charlie/programs/git.nix` imposta come identità di default quella **personale**, e usa `includeIf` per quella aziendale:
+
+| Percorso | Identità |
+|---|---|
+| ovunque | personale (default) |
+| `~/Progetti/**` | aziendale |
+| `~/Progetti/personali/**` | personale (torna al default) |
+
+Git applica gli include in ordine e l'ultimo che corrisponde vince, quindi la sottocartella `personali/` sovrascrive la regola più larga. Non serve riorganizzare le cartelle esistenti.
+
+Il file con l'identità aziendale **non è nella repo** e va creato a mano una volta sola:
+
+```bash
+mkdir -p ~/.config/git
+cat > ~/.config/git/identita-lavoro <<'EOF'
+[user]
+	name = Stefano Ponzi
+	email = nome.cognome@azienda.example
+EOF
+```
+
+Se il file non esiste git lo ignora in silenzio e resta valida l'identità personale.
+
+Verifica, da dentro un repo di lavoro e uno personale:
+
+```bash
+git -C ~/Progetti/SVO config user.email             # → aziendale
+git -C ~/Progetti/personali/nixos config user.email # → personale
+```
+
+Il file `~/.config/git/identita-personale` lo genera Home Manager e non va toccato a mano.
