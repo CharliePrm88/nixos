@@ -1,9 +1,8 @@
 {
-  config,
-  lib,
   pkgs,
   ...
-}: {
+}:
+{
   programs.dconf.enable = true;
 
   # Il demone gvfs: e' quello che da' a Caja i segnalibri di rete, il
@@ -12,7 +11,9 @@
   # tolto da modules/packages.nix.
   services.gvfs.enable = true;
 
-  services.xserver.enable = true;
+  # services.xserver.enable sta in modules/core/xserver.nix. Era
+  # dichiarato anche qui: due punti da tenere allineati per niente,
+  # visto che il modulo core e' sempre importato.
   services.xserver.desktopManager.mate.enable = true;
   services.xserver.desktopManager.mate.extraCajaExtensions = with pkgs.mate; [
     caja-extensions
@@ -64,16 +65,14 @@
     mate.mate-indicator-applet
     mate.mate-utils
     mate.python-caja
-    (pkgs.stdenv.mkDerivation {
-      name = "ambiant-mate-theme";
-      src = ../themes/mate;
-      installPhase = ''
-        mkdir -p $out/share/themes
-        mkdir -p $out/share/icons
-
-        cp -r themes/* $out/share/themes/
-        cp -r icons/* $out/share/icons/
-      '';
-    })
+    # Copia di file, niente da compilare: stdenv.mkDerivation tirava
+    # dentro tutto stdenv e le sue fasi (unpack, patch, configure,
+    # build, fixup) per poi usarne una sola. runCommand fa lo stesso
+    # lavoro senza quel contorno.
+    (pkgs.runCommand "ambiant-mate-theme" { } ''
+      mkdir -p "$out/share/themes" "$out/share/icons"
+      cp -r ${../themes/mate}/themes/. "$out/share/themes/"
+      cp -r ${../themes/mate}/icons/. "$out/share/icons/"
+    '')
   ];
 }

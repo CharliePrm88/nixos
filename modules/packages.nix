@@ -2,11 +2,10 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 {
-  config,
-  lib,
   pkgs,
   ...
-}: {
+}:
+{
   environment.systemPackages = with pkgs; [
     # =====================================================
     # Archiving / utils
@@ -86,8 +85,8 @@
     ueberzug
     w3m
     telegram-desktop
-	gnuchess
-	gnome-chess
+    gnuchess
+    gnome-chess
 
     # =====================================================
     # Unfree / AUR-like

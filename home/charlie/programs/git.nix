@@ -1,4 +1,7 @@
-{ config, ... }:
+{
+  config,
+  ...
+}:
 let
   # Identita' di default: quella personale. Va bene per questa repo,
   # per i progetti su GitHub e per qualunque cosa non sia lavoro.

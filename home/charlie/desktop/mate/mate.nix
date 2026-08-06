@@ -1,9 +1,5 @@
+{ ... }:
 {
-  config,
-  lib,
-  pkgs,
-  ...
-}: {
 
   home.file.".face".source = ../face.jpg;
 
@@ -47,12 +43,12 @@
     };
 
     "org/mate/calc" = {
-      button-mode="programming";
-	  show-history=false;
-	  source-currency="EUR";
-	  source-units="degree";
-	  target-currency="USD";
-	  target-units="radian";
+      button-mode = "programming";
+      show-history = false;
+      source-currency = "EUR";
+      source-units = "degree";
+      target-currency = "USD";
+      target-units = "radian";
     };
 
     "org/mate/desktop/accessibility/keyboard" = {
@@ -86,11 +82,11 @@
     "org/mate/desktop/applications/terminal" = { exec = "mate-terminal"; };
 
     "org/mate/desktop/background" = {
-  		color-shading-type = "vertical-gradient";
-	    picture-filename = "${../../../../modules/themes/radioactive.png}"; 
-	    picture-options = "zoom";
-	    primary-color = "rgb(88,145,188)";
-	    secondary-color = "rgb(60,143,37)";
+      color-shading-type = "vertical-gradient";
+      picture-filename = "${../../../../modules/themes/radioactive.png}";
+      picture-options = "zoom";
+      primary-color = "rgb(88,145,188)";
+      secondary-color = "rgb(60,143,37)";
     };
 
     "org/mate/desktop/interface" = {
@@ -292,9 +288,9 @@
     };
 
     "org/mate/screensaver" = {
-  	  mode = "blank-only";
-	  picture-filename = "${../../../../modules/themes/radioactive.png}";
-	};
+      mode = "blank-only";
+      picture-filename = "${../../../../modules/themes/radioactive.png}";
+    };
 
     "org/mate/screenshot" = {
       border-effect = "none";

@@ -1,9 +1,5 @@
+{ ... }:
 {
-  config,
-  lib,
-  pkgs,
-  ...
-}: {
   environment.etc."lightdm/lightdm-gtk-greeter.conf.d".source = ../themes/lightdm/lightdm-gtk-greeter.conf.d;
   services.xserver.displayManager.lightdm.greeters.gtk = {
     enable = true;

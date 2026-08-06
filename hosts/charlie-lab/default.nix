@@ -3,7 +3,10 @@
 # Punto di ingresso dell'host: qui sta solo cio' che e' specifico di
 # questa macchina (hardware, hostname, account, stateVersion). Tutto il
 # resto e' condiviso e vive in ../../modules.
-{ pkgs, ... }:
+{
+  pkgs,
+  ...
+}:
 {
   imports = [
     # Risultato di nixos-generate-config: UUID dei filesystem e

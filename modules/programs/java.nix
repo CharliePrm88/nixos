@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  ...
+}:
 {
   # Un solo JDK, dichiarato in un posto solo. Prima ce n'erano due in
   # environment.systemPackages (openjdk21 e openjdk25): due `java` nel

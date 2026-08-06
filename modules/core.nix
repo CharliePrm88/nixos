@@ -1,9 +1,5 @@
+{ ... }:
 {
-  config,
-  lib,
-  pkgs,
-  ...
-}: {
   imports = [
     ./core/audio.nix
     ./core/boot.nix
