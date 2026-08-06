@@ -8,8 +8,8 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Define your hostname.
-  networking.hostName = "charlie-lab";
+  # networking.hostName sta in hosts/<host>/default.nix: e' specifico
+  # della macchina, questo modulo e' condiviso fra tutti gli host.
 
   # Configure network connections interactively with nmcli or nmtui.
   networking.networkmanager.enable = true;

@@ -11,6 +11,7 @@
     ./core/lightdm.nix
     ./core/network.nix
     ./core/nix.nix
+    ./core/security.nix
     ./core/time.nix
     ./core/xserver.nix
   ];

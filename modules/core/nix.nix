@@ -5,4 +5,7 @@
     "nix-command"
     "flakes"
   ];
+
+  # Chrome, VS Code, JetBrains, Discord, Android Studio.
+  nixpkgs.config.allowUnfree = true;
 }

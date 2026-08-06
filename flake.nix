@@ -32,7 +32,7 @@
         # nixpkgs.hostPlatform in hardware-configuration.nix.
         specialArgs = { inherit inputs; };
         modules = [
-          ./configuration.nix
+          ./hosts/charlie-lab
           home-manager.nixosModules.home-manager
         ];
       };
