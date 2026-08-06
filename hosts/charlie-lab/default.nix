@@ -19,8 +19,6 @@
 
   networking.hostName = "charlie-lab";
 
-  system.autoUpgrade.enable = true;
-
   users.users.charlie = {
     isNormalUser = true;
     description = "Stefano Ponzi";
