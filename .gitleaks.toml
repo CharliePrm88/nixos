@@ -1,0 +1,28 @@
+title = "nixos config — regole gitleaks"
+
+# Parte dalle regole predefinite di gitleaks e aggiunge quelle specifiche
+# di questa repo (hash di password Unix e dominio aziendale).
+[extend]
+useDefault = true
+
+[[rules]]
+id = "unix-password-hash"
+description = "Hash password Unix in chiaro (yescrypt/bcrypt/sha-512)"
+regex = '''\$(?:6|y|2b)\$[./A-Za-z0-9]+\$[./A-Za-z0-9]{16,}'''
+tags = ["password", "hash"]
+
+[[rules]]
+id = "dominio-aziendale"
+description = "Riferimento al dominio aziendale"
+regex = '''(?i)\bleonardo\.com\b'''
+tags = ["pii", "email"]
+
+[allowlist]
+description = "Falsi positivi noti"
+# I placeholder lasciati da git filter-repo nella storia riscritta.
+regexes = [
+  '''\*\*\*REMOVED-PASSWORD-HASH\*\*\*''',
+  '''\*\*\*REMOVED-WORK-EMAIL\*\*\*''',
+]
+# Il file di configurazione di gitleaks contiene per forza i pattern stessi.
+paths = ['''^\.gitleaks\.toml$''']

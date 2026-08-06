@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+# Blocca il reingresso di segreti (hash password Unix, dominio aziendale)
+# nella repo. Attivare con:
+#
+#     git config core.hooksPath .githooks
+#
+# Il devShell del flake lo fa da solo (`nix develop`).
+#
+# Se gitleaks e' disponibile viene usato lui (regole in .gitleaks.toml);
+# altrimenti si ricade su un controllo grep equivalente, cosi' l'hook
+# funziona anche su una macchina senza Nix.
+#
+# Bypass di emergenza: git commit --no-verify
+
+set -uo pipefail
+
+rosso=$(tput setaf 1 2>/dev/null || true)
+giallo=$(tput setaf 3 2>/dev/null || true)
+reset=$(tput sgr0 2>/dev/null || true)
+
+blocca() {
+	echo "${rosso}pre-commit: commit bloccato — segreto rilevato nelle modifiche in stage.${reset}" >&2
+	echo "" >&2
+	echo "$1" >&2
+	echo "" >&2
+	echo "${giallo}Sposta il valore fuori dalla repo (vedi README §Segreti).${reset}" >&2
+	echo "${giallo}Se e' un falso positivo: aggiungilo all'allowlist in .gitleaks.toml,${reset}" >&2
+	echo "${giallo}oppure forza con  git commit --no-verify${reset}" >&2
+	exit 1
+}
+
+if command -v gitleaks >/dev/null 2>&1; then
+	# `gitleaks git --staged` e' la forma moderna (>= 8.19);
+	# `gitleaks protect --staged` quella delle versioni precedenti.
+	if gitleaks git --help >/dev/null 2>&1; then
+		uscita=$(gitleaks git --staged --no-banner --redact --config .gitleaks.toml 2>&1)
+	else
+		uscita=$(gitleaks protect --staged --no-banner --redact --config .gitleaks.toml 2>&1)
+	fi
+	esito=$?
+	if [ "$esito" -ne 0 ]; then
+		blocca "$uscita"
+	fi
+	exit 0
+fi
+
+echo "${giallo}pre-commit: gitleaks non trovato, uso il controllo grep di riserva.${reset}" >&2
+
+# Hash password Unix: $6$ (sha-512), $y$ (yescrypt), $2b$ (bcrypt).
+hash='\$(6|y|2b)\$[./A-Za-z0-9]+\$[./A-Za-z0-9]{16,}'
+dominio='leonardo\.com'
+
+trovati=$(git diff --cached --no-color -U0 --diff-filter=ACMR |
+	grep -E '^\+' |
+	grep -Ev '^\+\+\+' |
+	grep -Ev 'REMOVED-PASSWORD-HASH|REMOVED-WORK-EMAIL' |
+	grep -EIn "$hash|$dominio" |
+	sed -E "s#$hash#<HASH-PASSWORD-RILEVATO>#g")
+
+if [ -n "$trovati" ]; then
+	blocca "$trovati"
+fi
+
+exit 0
