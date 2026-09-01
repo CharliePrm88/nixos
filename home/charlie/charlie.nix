@@ -1,8 +1,7 @@
 { ... }:
 {
-  # Non va cambiata: e' il marcatore di compatibilita' dei dati di Home
-  # Manager, non la versione dei pacchetti.
-  home.stateVersion = "25.11";
+  # Marcatore di compatibilita' dei dati di Home Manager
+  home.stateVersion = "26.05";
 
   home.sessionVariables = {
     TERMINAL = "mate-terminal";

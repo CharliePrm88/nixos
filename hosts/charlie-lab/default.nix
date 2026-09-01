@@ -83,5 +83,5 @@
   #
   # Vedi `man configuration.nix` e
   # https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion
-  system.stateVersion = "25.11";
+  system.stateVersion = "26.05";
 }

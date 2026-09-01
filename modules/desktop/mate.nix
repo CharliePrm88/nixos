@@ -15,10 +15,10 @@
   # dichiarato anche qui: due punti da tenere allineati per niente,
   # visto che il modulo core e' sempre importato.
   services.xserver.desktopManager.mate.enable = true;
-  services.xserver.desktopManager.mate.extraCajaExtensions = with pkgs.mate; [
+  services.xserver.desktopManager.mate.extraCajaExtensions = with pkgs; [
     caja-extensions
   ];
-  services.xserver.desktopManager.mate.extraPanelApplets = with pkgs.mate; [
+  services.xserver.desktopManager.mate.extraPanelApplets = with pkgs; [
     mate-applets
   ];
   #dconf.settings = {
@@ -28,43 +28,41 @@
   #};
 
   environment.systemPackages = with pkgs; [
-    mate.caja-with-extensions
-    mate.atril
-    mate.engrampa
-    mate.eom
-    mate.mate-terminal
-    mate.mate-system-monitor
-    mate.mate-control-center
-    mate.mate-power-manager
-    mate.mate-screensaver
-    mate.mate-utils
-    mate.mate-media
-    mate.mate-themes
-    mate.mate-icon-theme
-    mate.mate-icon-theme-faenza
-    mate.mozo
-    mate.pluma
-    mate.mate-panel-with-applets
-    mate.mate-applets
-    mate.mate-notification-daemon
-    mate.mate-polkit
-    mate.mate-session-manager
-    mate.mate-settings-daemon
-    mate.mate-user-share
-    mate.mate-backgrounds
-    mate.mate-user-guide
-    mate.mate-netbook
-    mate.mate-sensors-applet
-    mate.marco
-    mate.libmatekbd
-    mate.libmatemixer
-    mate.libmateweather
-    mate.mate-calc
-    mate.mate-control-center
-    mate.mate-desktop
-    mate.mate-indicator-applet
-    mate.mate-utils
-    mate.python-caja
+    caja-with-extensions
+    atril
+    engrampa
+    eom
+    mate-terminal
+    mate-system-monitor
+    mate-control-center
+    mate-power-manager
+    mate-screensaver
+    mate-utils
+    mate-media
+    mate-themes
+    mate-icon-theme
+    mate-icon-theme-faenza
+    mozo
+    pluma
+    mate-panel-with-applets
+    mate-applets
+    mate-notification-daemon
+    mate-polkit
+    mate-session-manager
+    mate-settings-daemon
+    mate-user-share
+    mate-backgrounds
+    mate-user-guide
+    mate-netbook
+    mate-sensors-applet
+    marco
+    libmatekbd
+    libmatemixer
+    libmateweather
+    mate-calc
+    mate-desktop
+    mate-indicator-applet
+    python-caja
     # Copia di file, niente da compilare: stdenv.mkDerivation tirava
     # dentro tutto stdenv e le sue fasi (unpack, patch, configure,
     # build, fixup) per poi usarne una sola. runCommand fa lo stesso
