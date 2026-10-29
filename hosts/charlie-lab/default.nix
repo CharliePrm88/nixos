@@ -4,6 +4,7 @@
 # questa macchina (hardware, hostname, account, stateVersion). Tutto il
 # resto e' condiviso e vive in ../../modules.
 {
+  config,
   pkgs,
   ...
 }:
@@ -23,6 +24,11 @@
 
   networking.hostName = "charlie-lab";
 
+  # Modulo acpi_call (acpi_call-lts su Arch): chiamate ACPI dirette,
+  # usato per soglie di carica della batteria e simili. Dipende dal
+  # kernel, quindi va qui e non in modules/.
+  boot.extraModulePackages = [ config.boot.kernelPackages.acpi_call ];
+
   users.users.charlie = {
     isNormalUser = true;
     description = "Stefano Ponzi";
@@ -34,6 +40,12 @@
       "storage"
       "docker"
       "vboxusers"
+      # Gruppi che su Arch arrivavano dai pacchetti o che servono ai
+      # moduli aggiunti nella migrazione:
+      "wireshark" # cattura senza root (modules/programs/wireshark.nix)
+      "i2c" # ddcutil (modules/qol.nix)
+      "tss" # TPM2 senza root (modules/qol.nix)
+      "systemd-journal" # intruder-watch legge il journal (home/charlie/programs/intruder-watch.nix)
     ];
     shell = pkgs.zsh;
 

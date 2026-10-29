@@ -16,5 +16,9 @@
     mediainfo
     playerctl
     ffmpegthumbnailer
+    # Codec GStreamer (gst-plugins-good/bad su Arch): li usano i lettori
+    # e le anteprime di MATE.
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
   ];
 }

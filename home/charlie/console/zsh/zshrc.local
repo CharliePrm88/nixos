@@ -33,6 +33,18 @@ if [[ -o interactive ]] \
 fi
 
 #### =====================================================
+#### SSH AGENT
+#### =====================================================
+#### L'agent lo avvia services.ssh-agent (home/charlie/programs/ssh.nix);
+#### qui resta solo il comportamento di Arch: alla prima shell
+#### interattiva, se l'agent e' vuoto, carica la chiave di Azure DevOps.
+
+if [[ -o interactive ]] && [[ -S "$SSH_AUTH_SOCK" ]] \
+   && [[ -r "$HOME/.ssh/azureLeo" ]] && command -v ssh-add >/dev/null 2>&1; then
+  ssh-add -l >/dev/null 2>&1 || ssh-add "$HOME/.ssh/azureLeo"
+fi
+
+#### =====================================================
 #### PROMPT
 #### =====================================================
 

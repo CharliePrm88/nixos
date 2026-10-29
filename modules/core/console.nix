@@ -4,6 +4,9 @@
 }:
 {
   i18n.defaultLocale = "it_IT.UTF-8";
+  # Su Arch locale.gen generava anche l'inglese: alcuni tool e IDE lo
+  # richiedono esplicitamente.
+  i18n.extraLocales = [ "en_US.UTF-8/UTF-8" ];
 
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "it_IT.UTF-8";
@@ -15,13 +18,13 @@
     LC_PAPER = "it_IT.UTF-8";
     LC_TELEPHONE = "it_IT.UTF-8";
     LC_TIME = "it_IT.UTF-8";
-  }
+  };
 
   console = {
     font = "Lat2-Terminus16";
     #     keyMap = "it";
     useXkbConfig = true; # use xkb.options in tty.
-  };
+ };
 
   environment.systemPackages = with pkgs; [
     jq
@@ -34,5 +37,6 @@
     wget
     ranger
     dialog
+    less
   ];
 }

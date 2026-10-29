@@ -1,7 +1,20 @@
-{ ... }:
+{
+  pkgs,
+  ...
+}:
 {
 
   home.file.".face".source = ../face.jpg;
+
+  # Avvio automatico nella sessione MATE, come ~/.config/autostart su
+  # Arch (li' Webex puntava a /opt/Webex).
+  xdg.autostart = {
+    enable = true;
+    entries = [
+      "${pkgs.flameshot}/share/applications/org.flameshot.Flameshot.desktop"
+      "${pkgs.webex}/share/applications/webex.desktop"
+    ];
+  };
 
   gtk = {
     enable = true;
@@ -11,11 +24,50 @@
     iconTheme = {
       name = "Ambiant-MATE";
     };
+    # Segnalibri di Caja e dei file chooser (~/.config/gtk-3.0/bookmarks).
+    gtk3.bookmarks = [
+      "file:///home/charlie/Documenti"
+      "file:///home/charlie/Musica"
+      "file:///home/charlie/Immagini"
+      "file:///home/charlie/Video"
+      "file:///home/charlie/Scaricati"
+      "file:///home/charlie/Progetti"
+    ];
   };
 
   dconf.settings = {
     "org/mate/atril/default" = {
       window-ratio = [ 3.2184371430491168 1.2303453517647618 ];
+      continuous = true;
+      dual-page = false;
+      inverted-colors = true;
+      show-sidebar = true;
+      show-toolbar = true;
+      sidebar-page = "thumbnails";
+      sizing-mode = "fit-width";
+    };
+
+    # Preferenze del file chooser GTK e delle notifiche di nm-applet,
+    # riprese dal dconf di Arch.
+    "org/gtk/settings/file-chooser" = {
+      date-format = "regular";
+      location-mode = "path-bar";
+      show-hidden = true;
+      show-size-column = true;
+      show-type-column = true;
+      sort-column = "modified";
+      sort-directories-first = true;
+      sort-order = "ascending";
+      type-format = "category";
+    };
+
+    "org/gnome/nm-applet" = {
+      disable-connected-notifications = true;
+      disable-vpn-notifications = true;
+    };
+
+    "org/mate/desktop/media-handling" = {
+      autorun-x-content-start-app = [ "x-content/software" ];
     };
 
     "org/mate/caja/desktop" = {
@@ -108,7 +160,7 @@
     "org/mate/desktop/peripherals/mouse" = { cursor-theme = "mate"; };
 
     "org/mate/desktop/sound" = {
-      event-sounds = true;
+      event-sounds = false;
       input-feedback-sounds = true;
       theme-name = "__no_sounds";
     };
@@ -217,7 +269,10 @@
     };
 
     "org/mate/panel/objects/object-2" = {
-      launcher-location = "google-chrome.desktop";
+      # Percorso assoluto: un nome relativo viene cercato prima in
+      # ~/.config/mate/panel2.d/default/launchers, dove c'e' ancora la
+      # copia di Arch con Exec=/usr/bin/google-chrome-stable.
+      launcher-location = "/run/current-system/sw/share/applications/google-chrome.desktop";
       object-type = "launcher";
       panel-right-stick = false;
       position = 228;

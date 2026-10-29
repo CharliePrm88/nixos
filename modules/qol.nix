@@ -46,6 +46,15 @@
 
   services.printing.enable = true;
 
+  # ===================================================================
+  # Accessibilita'
+  # ===================================================================
+
+  # Lettore di schermo Orca (impostato in dconf come applicazione
+  # "visual" di MATE) con speech-dispatcher, come su Arch.
+  services.orca.enable = true;
+  services.speechd.enable = true;
+
   # Avahi serve a CUPS per trovare le stampanti di rete da solo (IPP
   # Everywhere / AirPrint): senza, le stampanti vanno aggiunte a mano per
   # indirizzo. nssmdns4 fa risolvere anche i nomi .local.
@@ -62,6 +71,22 @@
   # Inerte sulla VM (VirtualBox non passa il controller Bluetooth), ma il
   # modulo e' condiviso con il futuro host bare metal.
   hardware.bluetooth.enable = true;
+  # Applet e gestore grafico, come blueman su Arch (bluez-obex incluso:
+  # invio/ricezione file).
+  services.blueman.enable = true;
+
+  # TPM2: su Arch c'erano tpm2-tools e tpm2-abrmd col servizio attivo.
+  # tss2/abrmd danno l'accesso al TPM senza root ai membri di `tss`.
+  security.tpm2 = {
+    enable = true;
+    abrmd.enable = true;
+    pkcs11.enable = true;
+    tctiEnvironment.enable = true;
+  };
+
+  # ddcutil (luminosita' dei monitor esterni via DDC/CI): serve il bus
+  # i2c accessibile al gruppo `i2c`.
+  hardware.i2c.enable = true;
 
   # Aggiornamenti firmware via LVFS: `fwupdmgr refresh && fwupdmgr
   # update`. Anche questo inerte sulla VM, utile sul bare metal.

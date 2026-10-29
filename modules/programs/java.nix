@@ -12,6 +12,6 @@
   # comunque puntava a /usr/lib/jvm, percorso FHS inesistente su NixOS).
   programs.java = {
     enable = true;
-    package = pkgs.jdk21;
+    package = pkgs.jdk25;
   };
 }

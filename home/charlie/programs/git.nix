@@ -28,7 +28,15 @@ in
   programs.git = {
     enable = true;
 
-    settings.user = identitaPersonale;
+    settings = {
+      user = identitaPersonale;
+      # Come su Arch (~/.gitconfig): i token HTTPS restano in
+      # ~/.git-credentials, che e' un segreto e non sta nella repo.
+      credential.helper = "store";
+    };
+
+    # Era ~/.config/git/ignore su Arch.
+    ignores = [ "**/.claude/settings.local.json" ];
 
     # Git applica gli include nell'ordine in cui compaiono e l'ultimo
     # che corrisponde vince. I progetti di lavoro stanno sparsi in

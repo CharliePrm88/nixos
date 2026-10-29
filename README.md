@@ -252,7 +252,12 @@ Nella repo **non c'è nessun segreto**: né hash di password, né l'indirizzo em
 | Hash password di `root` | `/etc/secrets/root.hashedPassword` | a mano, vedi §8.1 |
 | Identità git aziendale | `~/.config/git/identita-lavoro` | a mano, vedi §8.2 |
 | Identità git personale | `~/.config/git/identita-personale` | Home Manager |
+| Token HTTPS di git | `~/.git-credentials` | da backup (`credential.helper = store`) |
 | Chiavi SSH | `~/.ssh/` | da backup |
+| Chiavi GPG | `~/.gnupg/` | da backup |
+| Chiavi WireGuard | `~/.config/wireguard/` | da backup |
+| Token Telegram di intruder-watch | `~/.config/intruder-watch/env` | a mano, vedi `home/charlie/programs/intruder-watch.nix` |
+| Profili Wi-Fi/VPN | `/etc/NetworkManager/system-connections/` | da backup, vedi §8.3 |
 
 Nessuno di questi è gestito da NixOS: sopravvivono ai rebuild ma **vanno nel backup**, perché non sono nella repo.
 
@@ -330,6 +335,46 @@ git -C ~/Progetti/personali/nixos config user.email   # → personale
 
 `~/.config/git/identita-personale` lo genera Home Manager: non va modificato a mano.
 
+### 8.3 Profili NetworkManager
+
+I profili Wi-Fi e VPN contengono le password in chiaro: non stanno nella repo ma in `/etc/NetworkManager/system-connections/`, che NetworkManager gestisce da sé anche su NixOS. Per ripristinarli da un backup:
+
+```bash
+sudo install -m 0600 -o root -g root /percorso/backup/*.nmconnection /etc/NetworkManager/system-connections/
+sudo nmcli connection reload
+```
+
+Togliere prima eventuali `interface-name=wlan0`: su NixOS la scheda Wi-Fi ha un nome stabile (`wlp…`) e un profilo legato a `wlan0` non si attiva mai. I certificati della VPN OpenVPN stanno in `~/.local/share/networkmanagement/certificates/`.
+
+### 8.4 Chiavi Secure Boot
+
+Come su Arch, il Secure Boot usa chiavi proprie gestite da `sbctl`, senza shim. Le chiavi stanno in `/var/lib/sbctl`, fuori dalla repo: la chiave privata `db.key` permette di firmare qualunque cosa il firmware accetterà, quindi non va mai copiata nella repo. Conviene invece tenerne un backup cifrato: se si perdono, per firmare di nuovo bisogna rifare tutta la procedura, BIOS compreso.
+
+Ogni `nixos-rebuild switch` firma `grubx64.efi` e i kernel in `/boot/kernels` (`extraInstallCommands` in `modules/core/boot.nix`). Senza chiavi la firma viene saltata con un avviso. Gli initrd non sono firmati, come su Arch.
+
+Procedura iniziale, o dopo aver perso le chiavi:
+
+```bash
+# 1. Secure Boot ancora spento. Creare le chiavi e fare il rebuild:
+#    GRUB viene reinstallato con i moduli inclusi e firmato insieme ai kernel.
+sudo sbctl create-keys
+sudo nixos-rebuild switch --flake /etc/nixos#charlie-lab
+sudo sbctl verify          # grubx64.efi e i *-bzImage devono risultare firmati
+
+# 2. Riavviare e controllare che NixOS e Windows partano ancora da GRUB.
+
+# 3. Nel BIOS: cancellare le chiavi / entrare in Setup Mode. Riavviare in NixOS:
+sudo sbctl status          # Setup Mode: Enabled
+sudo sbctl enroll-keys --microsoft
+
+# 4. Nel BIOS: attivare il Secure Boot. Dopo l'avvio:
+sudo sbctl status          # Secure Boot: Enabled
+```
+
+`--microsoft` è obbligatorio: senza le chiavi Microsoft Windows non si avvia più, e su alcune schede nemmeno le option ROM della GPU. Se Windows usa BitLocker, al primo avvio dopo il cambio di chiavi chiederà la recovery key: sospendere BitLocker prima del passo 3, o tenere la chiave a portata di mano.
+
+Se dopo il passo 4 GRUB dà `prohibited by secure boot policy` su un modulo, quel modulo manca dalla lista `--modules` in `modules/core/boot.nix`: aggiungerlo, disattivare il Secure Boot, fare il rebuild, riattivarlo.
+
 ## 9. Aggiungere un host
 
 Vedi `hosts/charlie-desktop/README.md`, che è il segnaposto documentato per il futuro bare metal. In sintesi: generare l'`hardware-configuration.nix` sulla macchina di destinazione, scrivere un `default.nix` sul modello di `charlie-lab`, registrare `nixosConfigurations.<nome>` in `flake.nix`, `git add`.
@@ -341,7 +386,9 @@ Vedi `hosts/charlie-desktop/README.md`, che è il segnaposto documentato per il 
 - **`git add` prima di ogni build.** Il flake ignora i file non tracciati. È la causa più comune di errori incomprensibili.
 - **`nixos-rebuild switch` va sempre lanciato con `--flake .#charlie-lab`.** Senza, `nixos-rebuild` cerca `/etc/nixos/configuration.nix`, che non esiste più.
 - **`boot.loader.grub.enableCryptodisk = true`** serve solo se `/boot` sta su un volume LUKS. Con il partizionamento di §3 è inerte: si può lasciare.
-- **Path FHS residui in `home/charlie/desktop/i3wm/config`:** `/usr/lib/mate-polkit/polkit-mate-authentication-agent-1` e `/opt/Webex/bin/CiscoCollabHost` non esistono su NixOS. Le due righe `exec` falliscono in silenzio. Da sistemare puntando al Nix store (per il primo: `${pkgs.mate.mate-polkit}/libexec/polkit-mate-authentication-agent-1`).
+- **Path FHS in `home/charlie/desktop/i3wm/config`:** il file è quello di Arch, invariato. `/usr/lib/mate-polkit/…` e `/opt/Webex/…` vengono sostituiti con i percorsi nello store da `i3wm.nix` (`builtins.replaceStrings`): se si aggiungono altri path FHS al file, vanno aggiunti anche lì.
+- **App fuori da nixpkgs** (`home/charlie/programs/opt-apps.nix`): SQL Developer e AsciidocFX stanno in `~/.local/opt/`, copiati dal vecchio `/opt` di Arch. Nix dichiara solo lanciatori e voci di menu: i file vanno nel backup.
+- **`xdg.mimeApps`** rende `~/.config/mimeapps.list` di sola lettura: le associazioni si cambiano in `home/charlie/desktop/mime.nix`, non dalle finestre "Apri con".
 - **Il tema Ambiant-MATE** viene costruito da `modules/themes/mate` e installa solo `themes/` e `icons/`. Le due cartelle `gtksourceview-*` sono nella repo ma non finiscono nel pacchetto.
 - **`hardware.bluetooth` e `services.fwupd`** sono attivi ma inerti su una VM VirtualBox. Servono al futuro host bare metal.
 - **Storia git riscritta.** I segreti sono stati rimossi da tutta la storia con `git filter-repo`, ma su GitHub il ref `refs/pull/1/head` non è cancellabile con un force push: i vecchi commit restano raggiungibili per SHA diretto. La password è stata cambiata, quindi l'hash non è più valido.
