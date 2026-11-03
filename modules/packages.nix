@@ -91,6 +91,7 @@
     pandoc
     # asciidoctor + asciidoctor-pdf (e le altre estensioni)
     asciidoctor-with-extensions
+    graphviz # dot, neato, ...; serve anche ai diagrammi di asciidoctor
     odt2txt
     calibre
 
