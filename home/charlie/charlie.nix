@@ -44,6 +44,7 @@
     ./desktop/plank.nix
     ./programs/direnv.nix
     ./programs/git.nix
+    ./programs/gpg.nix
     ./programs/intruder-watch.nix
     ./programs/jdks.nix
     ./programs/opt-apps.nix
