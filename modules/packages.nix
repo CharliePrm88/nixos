@@ -76,7 +76,7 @@
     gradle
     maven
     ant
-    nodejs
+    nodejs_latest
     # Il JDK arriva da programs.java (modules/programs/java.nix):
     # metterlo anche qui significava due `java` nel PATH globale.
     visualvm
