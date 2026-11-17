@@ -21,6 +21,7 @@
     # Android
     # =====================================================
     android-tools
+    scrcpy # schermo e controllo del telefono via adb
     arduino-cli
 
     # =====================================================
@@ -36,6 +37,7 @@
     copyq
     xdotool
     pavucontrol
+    x11vnc
 
     # =====================================================
     # Networking
@@ -52,6 +54,7 @@
     openssl # CLI: certificati, chiavi, s_client
     mosquitto # client MQTT (mosquitto_pub/sub); il broker non era attivo
     postgresql # client psql; il server non era attivo
+    bruno # client per API REST/GraphQL, collezioni salvate come file
     spotify
 
     # =====================================================
@@ -111,6 +114,7 @@
     cmatrix
     tickrs
     git-filter-repo
+    nvd
     gparted
     usbutils
     ntfs3g

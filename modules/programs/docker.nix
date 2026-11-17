@@ -7,5 +7,6 @@
 
   environment.systemPackages = with pkgs; [
     docker-compose
+    lazydocker # TUI per container, immagini e log
   ];
 }

@@ -17,6 +17,14 @@
 export M2_HOME="$HOME/.m2"
 export PATH="$HOME/.local/bin:$PATH"
 
+#### Nella sessione X11 l'editor e' VS Code; in console (tty, ssh) resta
+#### nano (EDITOR in home/charlie/charlie.nix). git, crontab -e e
+#### sudoedit usano VISUAL prima di EDITOR. --wait li fa aspettare
+#### finche' la scheda non viene chiusa.
+if [[ "$XDG_SESSION_TYPE" == x11 ]] && command -v code >/dev/null 2>&1; then
+  export VISUAL="code --wait"
+fi
+
 #### =====================================================
 #### FORTUNE + COWSAY (solo shell interattiva)
 #### =====================================================

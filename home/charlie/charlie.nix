@@ -47,6 +47,7 @@
     ./programs/gpg.nix
     ./programs/intruder-watch.nix
     ./programs/jdks.nix
+    ./programs/nixup.nix
     ./programs/opt-apps.nix
     ./programs/ssh.nix
     ./programs/misc.nix

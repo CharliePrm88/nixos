@@ -7,6 +7,7 @@
     ./programs/java.nix
     ./programs/nix-ld.nix
     ./programs/rust.nix
+    ./programs/thunderbird.nix
     ./programs/webex.nix
     ./programs/virtualbox.nix
     ./programs/wireshark.nix
