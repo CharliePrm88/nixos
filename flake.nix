@@ -37,7 +37,7 @@
         ];
       };
 
-      formatter.${system} = pkgs.nixfmt-rfc-style;
+      formatter.${system} = pkgs.nixfmt;
 
       # `nix develop` per lavorare sulla repo: strumenti di lint e
       # formattazione, piu' l'attivazione dell'hook pre-commit.
@@ -45,7 +45,7 @@
         packages = with pkgs; [
           deadnix
           gitleaks
-          nixfmt-rfc-style
+          nixfmt
           statix
         ];
         shellHook = ''

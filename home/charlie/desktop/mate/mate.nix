@@ -37,7 +37,10 @@
 
   dconf.settings = {
     "org/mate/atril/default" = {
-      window-ratio = [ 3.2184371430491168 1.2303453517647618 ];
+      window-ratio = [
+        3.2184371430491168
+        1.2303453517647618
+      ];
       continuous = true;
       dual-page = false;
       inverted-colors = true;
@@ -75,8 +78,30 @@
     };
 
     "org/mate/caja/list-view" = {
-      default-column-order = [ "name" "size" "type" "date_modified" "date_accessed" "date_created" "extension" "group" "where" "mime_type" "octal_permissions" "owner" "permissions" "size_on_disk" "Xattr::Tags" ];
-      default-visible-columns = [ "name" "size" "type" "date_modified" "where" ];
+      default-column-order = [
+        "name"
+        "size"
+        "type"
+        "date_modified"
+        "date_accessed"
+        "date_created"
+        "extension"
+        "group"
+        "where"
+        "mime_type"
+        "octal_permissions"
+        "owner"
+        "permissions"
+        "size_on_disk"
+        "Xattr::Tags"
+      ];
+      default-visible-columns = [
+        "name"
+        "size"
+        "type"
+        "date_modified"
+        "where"
+      ];
     };
 
     "org/mate/caja/preferences" = {
@@ -127,11 +152,21 @@
       togglekeys-enable = false;
     };
 
-    "org/mate/desktop/applications/at/mobility" = { exec = "onboard"; };
-    "org/mate/desktop/applications/at/visual" = { exec = "orca"; };
-    "org/mate/desktop/applications/calculator" = { exec = "mate-calc"; };
-    "org/mate/desktop/applications/messenger" = { exec = "pidgin"; };
-    "org/mate/desktop/applications/terminal" = { exec = "mate-terminal"; };
+    "org/mate/desktop/applications/at/mobility" = {
+      exec = "onboard";
+    };
+    "org/mate/desktop/applications/at/visual" = {
+      exec = "orca";
+    };
+    "org/mate/desktop/applications/calculator" = {
+      exec = "mate-calc";
+    };
+    "org/mate/desktop/applications/messenger" = {
+      exec = "pidgin";
+    };
+    "org/mate/desktop/applications/terminal" = {
+      exec = "mate-terminal";
+    };
 
     "org/mate/desktop/background" = {
       color-shading-type = "vertical-gradient";
@@ -156,8 +191,12 @@
       name = "CatturaSchermataFlameShot";
     };
 
-    "org/mate/desktop/peripherals/keyboard" = { numlock-state = "on"; };
-    "org/mate/desktop/peripherals/mouse" = { cursor-theme = "mate"; };
+    "org/mate/desktop/peripherals/keyboard" = {
+      numlock-state = "on";
+    };
+    "org/mate/desktop/peripherals/mouse" = {
+      cursor-theme = "mate";
+    };
 
     "org/mate/desktop/sound" = {
       event-sounds = false;
@@ -165,7 +204,9 @@
       theme-name = "__no_sounds";
     };
 
-    "org/mate/engrampa/dialogs/batch-add" = { default-extension = ".7z"; };
+    "org/mate/engrampa/dialogs/batch-add" = {
+      default-extension = ".7z";
+    };
     "org/mate/engrampa/dialogs/extract" = {
       create-subdirectory = false;
       overwrite = true;
@@ -215,8 +256,22 @@
     };
 
     "org/mate/panel/general" = {
-      object-id-list = [ "menu-bar" "notification-area" "clock" "show-desktop" "window-list" "workspace-switcher" "object-2" "object-1" "object-0" "object-4" ];
-      toplevel-id-list = [ "top" "bottom" ];
+      object-id-list = [
+        "menu-bar"
+        "notification-area"
+        "clock"
+        "show-desktop"
+        "window-list"
+        "workspace-switcher"
+        "object-2"
+        "object-1"
+        "object-0"
+        "object-4"
+      ];
+      toplevel-id-list = [
+        "top"
+        "bottom"
+      ];
     };
 
     "org/mate/panel/objects/clock" = {
@@ -229,7 +284,9 @@
     };
 
     "org/mate/panel/objects/clock/prefs" = {
-      cities = [ "<location name=\"\" city=\"Rome\" timezone=\"Europe/Rome\" latitude=\"41.783333\" longitude=\"12.583333\" code=\"LIRA\" current=\"true\"/>" ];
+      cities = [
+        "<location name=\"\" city=\"Rome\" timezone=\"Europe/Rome\" latitude=\"41.783333\" longitude=\"12.583333\" code=\"LIRA\" current=\"true\"/>"
+      ];
       expand-locations = true;
       show-temperature = true;
       show-weather = true;
@@ -338,7 +395,10 @@
       display-right-margin = false;
       highlight-current-line = true;
       side-panel-size = 200;
-      size = [ 1916 770 ];
+      size = [
+        1916
+        770
+      ];
       statusbar-visible = true;
     };
 

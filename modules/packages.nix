@@ -115,6 +115,9 @@
     tickrs
     git-filter-repo
     nvd
+    nixpkgs-review # build e test delle PR di nixpkgs in locale
+    nix-output-monitor # `nom`: output leggibile per build e rebuild
+    nixfmt # formatter ufficiale (stile RFC 166)
     gparted
     usbutils
     ntfs3g

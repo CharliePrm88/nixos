@@ -24,7 +24,7 @@
     font = "Lat2-Terminus16";
     #     keyMap = "it";
     useXkbConfig = true; # use xkb.options in tty.
- };
+  };
 
   environment.systemPackages = with pkgs; [
     jq
